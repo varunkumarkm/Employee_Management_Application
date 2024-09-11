@@ -1,6 +1,6 @@
 package com.employee.management.app.Payload;
 
-import java.util.List;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeResponseDTO {
 
-	private int total;
-    private int page;
-    private int pageSize;
-    private List<EmployeeDTO> data;
+	private int id;
+    private String empCode;
+    private String firstName;
+    private String lastName;
+    private String fullName;
+    private String email;
+    private String phone;
+    private LocalDate doj;
+    private int organizationId;
+    private String organizationName;
+    private int designationId;
+    private String designationName;
 }

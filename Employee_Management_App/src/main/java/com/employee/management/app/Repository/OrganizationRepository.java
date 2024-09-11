@@ -9,6 +9,13 @@ import com.employee.management.app.Entities.Organization;
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
 	
-    Page<Organization> findByShortCodeContainingIgnoreCase(String shortCode, Pageable pageable);
+	
+		boolean existsByName(String name);
+	
+		boolean existsByShortCode(String shortCode);
+	
+		Page<Organization> findAllByNameContainingIgnoreCase(String searchStr, Pageable pageable);
 
+
+		
 }

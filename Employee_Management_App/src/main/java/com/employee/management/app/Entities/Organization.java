@@ -21,6 +21,9 @@ public class Organization  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+	
+	@Column(name = "name")
+	private String name;
 
     @Column(name = "short_code", nullable = false, length = 2)
     private String shortCode;

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class OrganizationResponseDTO {
     private int id;
-    private String shortCode;
+    private String name;
     private String city;
     private String country;
     private String state;

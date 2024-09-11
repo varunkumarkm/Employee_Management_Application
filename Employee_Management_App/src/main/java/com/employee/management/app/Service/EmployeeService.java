@@ -1,12 +1,16 @@
 package com.employee.management.app.Service;
 
-import java.time.LocalDate;
-import com.employee.management.app.Payload.EmployeeDTO;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import com.employee.management.app.Payload.EmployeeRequestDTO;
 import com.employee.management.app.Payload.EmployeeResponseDTO;
 
 public interface EmployeeService {
 
-	EmployeeResponseDTO getEmployees(String searchStr, Integer organizationId, Integer designationId, LocalDate doj, int page, int pageSize);
-    EmployeeDTO createEmployee(EmployeeRequestDTO employeeRequestDTO);
+    EmployeeRequestDTO createEmployee(EmployeeRequestDTO employeeDto);
+    
+    Page<EmployeeResponseDTO> getEmployees(String searchStr, Integer organizationId, Integer designationId, String doj, int page, int pageSize, Sort sort);
+
+	
 }

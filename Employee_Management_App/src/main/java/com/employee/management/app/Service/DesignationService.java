@@ -1,12 +1,14 @@
 package com.employee.management.app.Service;
 
 import org.springframework.data.domain.Page;
-import com.employee.management.app.Payload.DesignationDTO;
+import org.springframework.data.domain.Sort;
 
-public interface DesignationService {
+import com.employee.management.app.Payload.DesignationResponseDTO;
 
-	Page<DesignationDTO> getDesignations(String searchStr, int page, int pageSize);
+	public interface DesignationService {
+		
+		DesignationResponseDTO createDesignation(DesignationResponseDTO designationDTO);
 
-	DesignationDTO createDesignation(DesignationDTO designationDTO);
-
-}
+		Page<DesignationResponseDTO> getDesignations(String searchStr, int page, int pageSize, Sort sort);
+	
+	}

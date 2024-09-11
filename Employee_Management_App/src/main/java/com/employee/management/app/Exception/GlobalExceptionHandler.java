@@ -1,41 +1,34 @@
 package com.employee.management.app.Exception;
 
-import java.util.Date;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.employee.management.app.Payload.ErrorDetails;
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-@ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-	
-	
-    //Global Exception
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<ErrorDetails> handleAllException(
-			ResourceNotFoundException exception,
-			WebRequest webRequest	
-	  ){
-		ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),
-				webRequest.getDescription(false));
-		
-		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);			
-	}
-	
-	
-	//specific exception
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorDetails> handleResourceNotFoundException(
-			Exception exception,
-			WebRequest webRequest	
-	  ){
-		ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
-				webRequest.getDescription(false));
-		
-		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);			
-	}
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            if (error instanceof FieldError) {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            }
+        });
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UniqueConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleUniqueConstraintViolation(UniqueConstraintViolationException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 }
