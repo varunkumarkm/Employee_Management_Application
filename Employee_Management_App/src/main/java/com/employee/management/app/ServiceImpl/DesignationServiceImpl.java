@@ -34,7 +34,7 @@ public class DesignationServiceImpl implements DesignationService {
     public DesignationResponseDTO createDesignation(DesignationResponseDTO designationDTO) {
         try {
             Designation designation = new Designation();
-            designation.setName(designationDTO.getName());
+            designation.setDesignationName(designationDTO.getDesignationName());
             designation.setCreatedDate(LocalDateTime.now());
             designation = designationRepository.save(designation);
             return mapToDTO(designation);
@@ -57,7 +57,6 @@ public class DesignationServiceImpl implements DesignationService {
 
             cq.where(predicate);
 
-            // Determine sort direction
             if (sort != null && !sort.isEmpty()) {
                 List<Order> orders = sort.stream()
                     .map(order -> order.isAscending() 
@@ -72,7 +71,7 @@ public class DesignationServiceImpl implements DesignationService {
             query.setMaxResults(pageSize);
 
             List<Designation> designations = query.getResultList();
-            long totalRecords = countDesignations(predicate);  // Method to count total records
+            long totalRecords = countDesignations(predicate);  
             Page<Designation> designationPage = new PageImpl<>(designations, PageRequest.of(page - 1, pageSize, sort), totalRecords);
 
             return designationPage.map(this::mapToDTO);
@@ -93,7 +92,7 @@ public class DesignationServiceImpl implements DesignationService {
     private DesignationResponseDTO mapToDTO(Designation designation) {
         DesignationResponseDTO dto = new DesignationResponseDTO();
         dto.setId(designation.getId());
-        dto.setName(designation.getName());
+        dto.setDesignationName(designation.getDesignationName());
         return dto;
     }
 }

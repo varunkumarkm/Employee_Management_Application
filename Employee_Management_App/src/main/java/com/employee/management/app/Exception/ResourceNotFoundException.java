@@ -1,30 +1,34 @@
 package com.employee.management.app.Exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException{
+public class ResourceNotFoundException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-	private String resourceName;
-	private String fieldName;
-	private long fieldValue;
-	
-	public ResourceNotFoundException(String resourceName, String fieldName, long fieldValue) {
-		super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
-		this.resourceName = resourceName;
-		this.fieldName = fieldName;
-		this.fieldValue = fieldValue;
-	}
+    private static final long serialVersionUID = 1L;
+    private String resourceName;
+    private String fieldName;
+    private long fieldValue;
 
-	public ResourceNotFoundException(String string) {
-		
-	}
+    public ResourceNotFoundException(String resourceName, String fieldName, long fieldValue) {
+        super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
+        this.resourceName = resourceName;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+    }
 
-	public ResourceNotFoundException() {
-		super();
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+    
+    public ResourceNotFoundException() {
+        super();
+    }
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public String getResourceName() {
@@ -38,5 +42,6 @@ public class ResourceNotFoundException extends RuntimeException{
 	public long getFieldValue() {
 		return fieldValue;
 	}
-}
 
+    
+}

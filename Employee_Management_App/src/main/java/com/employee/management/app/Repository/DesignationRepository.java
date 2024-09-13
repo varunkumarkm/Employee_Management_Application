@@ -11,6 +11,6 @@ import com.employee.management.app.Entities.Designation;
 @Repository
 public interface DesignationRepository extends JpaRepository<Designation, Integer> {
 
-	 @Query("SELECT d FROM Designation d WHERE LOWER(d.name) LIKE LOWER(CONCAT('%', :searchStr, '%'))")
-	    Page<Designation> findByNameContainingIgnoreCase(@Param("searchStr") String searchStr, Pageable pageable);
+    @Query("SELECT d FROM Designation d WHERE LOWER(d.designationName) LIKE LOWER(CONCAT('%', :searchStr, '%'))")
+    Page<Designation> findByDesignationNameContainingIgnoreCase(@Param("searchStr") String searchStr, Pageable pageable);
 }

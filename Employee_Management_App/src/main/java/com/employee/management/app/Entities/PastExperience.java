@@ -1,20 +1,10 @@
 package com.employee.management.app.Entities;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @Entity
@@ -29,9 +19,9 @@ public class PastExperience {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
+    private Employee employee; // Assuming Employee entity is already defined
 
-    @Column(name = "company_name", length = 100, nullable = false)
+    @Column(name = "company_name", nullable = false, length = 100)
     private String companyName;
 
     @Column(name = "start_date", nullable = false)
@@ -40,11 +30,11 @@ public class PastExperience {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @ManyToOne
-    @JoinColumn(name = "designation", nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "designation_id", nullable = false)
     private Designation designation;
+
 
     @Column(name = "responsibilities", columnDefinition = "TEXT")
     private String responsibilities;
-    
 }

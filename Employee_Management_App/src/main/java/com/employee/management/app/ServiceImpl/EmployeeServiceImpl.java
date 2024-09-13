@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 import com.employee.management.app.Entities.Designation;
 import com.employee.management.app.Entities.Employee;
 import com.employee.management.app.Entities.Organization;
+import com.employee.management.app.Exception.ResourceNotFoundException;
 import com.employee.management.app.Exception.UniqueConstraintViolationException;
 import com.employee.management.app.Payload.EmployeeRequestDTO;
+import com.employee.management.app.Payload.EmployeeResponseByIdDTO;
 import com.employee.management.app.Payload.EmployeeResponseDTO;
 import com.employee.management.app.Repository.DesignationRepository;
+import com.employee.management.app.Repository.EmployeeCommunicationRepository;
 import com.employee.management.app.Repository.EmployeeRepository;
 import com.employee.management.app.Repository.OrganizationRepository;
+import com.employee.management.app.Repository.PastExperienceRepository;
 import com.employee.management.app.Service.EmployeeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -53,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeResponseDTO> getEmployees(String searchStr, Integer organizationId, Integer designationId, String doj, int page, int pageSize, Sort sort) {
+    public Page<EmployeeResponseByIdDTO> getEmployees(String searchStr, Integer organizationId, Integer designationId, String doj, int page, int pageSize, Sort sort) {
     	
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, sort);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -114,9 +118,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         return entityManager.createQuery(countQuery).getSingleResult();
     }
 
-    private EmployeeResponseDTO mapToResponseDto(Employee employee) {
-        return modelMapper.map(employee, EmployeeResponseDTO.class);
+	private EmployeeResponseByIdDTO mapToResponseDto(Employee employee) {
+		EmployeeResponseByIdDTO dto = modelMapper.map(employee, EmployeeResponseByIdDTO.class);
+        
+
+        dto.setEmailId(employee.getEmail());
+
+        if (employee.getDesignation() != null) {
+            dto.setDesignationId(employee.getDesignation().getId());
+            dto.setDesignationName(employee.getDesignation().getDesignationName());
+        } else {
+            dto.setDesignationId(0); 
+            dto.setDesignationName(null); 
+        }
+
+        return dto;
     }
+
 
     @Override
     public EmployeeRequestDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
@@ -177,4 +195,13 @@ public class EmployeeServiceImpl implements EmployeeService {
  
         return employee;
     }
+	@Override
+	public EmployeeResponseByIdDTO getEmployeeById(Integer employeeId) throws ResourceNotFoundException {
+	    Employee employee = employeeRepository.findById(employeeId)
+	        .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
+	    
+	    return mapToResponseDto(employee);
+	}
+	
+
 }

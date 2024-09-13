@@ -2,6 +2,7 @@ package com.employee.management.app.Payload;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrganizationRequestDTO {
 
+	private int id;
+	
     @NotNull(message = "Short code is required")
     @Size(min = 2, max = 2, message = "Short code must be exactly 2 characters")
     private String shortCode;
@@ -38,6 +41,7 @@ public class OrganizationRequestDTO {
 
     @NotNull(message = "Pincode is required")
     @NotEmpty(message = "Pincode cannot be empty")
+    @Pattern(regexp = "^[0-9]{6}$", message = "Pincode must be 6 digits")
     private String pincode;
 
 }

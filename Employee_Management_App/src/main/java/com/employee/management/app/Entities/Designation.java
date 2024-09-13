@@ -1,6 +1,7 @@
 package com.employee.management.app.Entities;
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,13 +23,14 @@ public class Designation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
+    @Column(name = "designation_Name", nullable = false, length = 50)
+    private String designationName;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "bit(1) default 1")
     private Boolean isActive = true;  
 
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdDate;
 
 }

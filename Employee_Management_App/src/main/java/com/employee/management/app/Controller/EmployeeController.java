@@ -9,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import com.employee.management.app.Exception.ResourceNotFoundException;
 import com.employee.management.app.Payload.EmployeeRequestDTO;
+import com.employee.management.app.Payload.EmployeeResponseByIdDTO;
 import com.employee.management.app.Payload.EmployeeResponseDTO;
 import com.employee.management.app.Service.EmployeeService;
 import jakarta.validation.Valid;
@@ -63,7 +66,7 @@ public class EmployeeController {
 	                }
 	            }
 
-	            Page<EmployeeResponseDTO> employeePage = employeeService.getEmployees(searchStr, organizationId, designationId, doj, page, pageSize, sort);
+	            Page<EmployeeResponseByIdDTO> employeePage = employeeService.getEmployees(searchStr, organizationId, designationId, doj, page, pageSize, sort);
 
 	            Map<String, Object> response = new HashMap<>();
 	            response.put("data", employeePage.getContent());
@@ -87,4 +90,47 @@ public class EmployeeController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	        }
 	    }
+	  @GetMapping("/{employeeId}")
+	  public ResponseEntity<?> getEmployeeById(@PathVariable("employeeId") Integer employeeId) {
+	      try {
+	          EmployeeResponseByIdDTO employeeResponse = employeeService.getEmployeeById(employeeId);
+	          return ResponseEntity.ok().body(employeeResponse);
+	      } catch (ResourceNotFoundException e) {
+	          // Return error message with 404 Not Found status
+	          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+	      } catch (Exception e) {
+	          // Return empty body with 500 Internal Server Error status
+	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Internal server error"));
+	      }
+	  }
+
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

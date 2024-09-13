@@ -1,6 +1,7 @@
 package com.employee.management.app.Payload;
 
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeResponseDTO {
+public class EmployeeResponseByIdDTO {
 
 	    private int id;
 	    private String empCode;
@@ -22,5 +23,8 @@ public class EmployeeResponseDTO {
 	    private String organizationName;
 	    private int designationId;
 	    private String designationName;
+	    
+	    private List<EmployeeCommunicationResponseDTO> communications;
+	    private List<PastExperienceRequestDTO> pastExperiences;
 	    
 }
